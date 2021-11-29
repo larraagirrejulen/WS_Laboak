@@ -43,7 +43,7 @@
         $pasahitza = $_POST['pasahitza'];
         $pasahitza = crypt($pasahitza, 'st');
         $dbq = new mysqli($zerbitzaria, $erabiltzailea, $gakoa, $db);
-        $sql = "SELECT deiturak, mota, egoera FROM users WHERE posta='$posta' AND pasahitza='$pasahitza';";
+        $sql = "SELECT deiturak, mota, egoera, irudia, imgdata FROM users WHERE posta='$posta' AND pasahitza='$pasahitza';";
         if(!$ema=$dbq->query($sql)){
           die('Errorea frogaketan: '.$dbq->error."<br>");
         }
@@ -55,15 +55,25 @@
           if($erabInfo[2] == 1){
             $deiturak = $erabInfo[0];
             $mota = $erabInfo[1];
+            $img = $emaitzak[2]; //Argazkia blob base 64
+            $img_props = $emaitzak[3]; //Argazkiaren formatua
 
             $log_MSG = $log_MSG."Kredentzial egokiak <br> <br>"; //TODO Ez da beharrezkoa
             $log_MSG = $log_MSG."<h1> Ongi Etorri '$dseiturak' </h1>";
 
 
-            ini_set('session.cookie_lifetime',60);
             $_SESSION['posta'] = $posta;
             $_SESSION['mota'] = $mota;
             erabUserCounterGehitu($posta);
+
+            if($img != null && $img_props != null){
+              $img_name = explode(-1, $img_props);
+              $img_name = $img_name[count($img_name)-1];
+              $_SESSION['img'] = "data:image/".$img_name.";base64,$img_props";
+            }else{
+              $_SESSION['img'] = "../images/question_mark.png"
+            }
+
             if($mota == "ikasle"){
               header("location: ../php/HandlingQuizezAjax.php");
             }else if ($mota == "ikasle") {
