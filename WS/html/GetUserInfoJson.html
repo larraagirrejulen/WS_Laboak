@@ -1,0 +1,33 @@
+<HTML>
+    <HEAD>
+        <script type="text/javascript" src="../js/GetUserInfoJson.js"> </script>
+        <script type="text/javascript" src="../js/jquery-3.4.1.min.js"> </script>
+        <style>
+            label, input {
+                margin-bottom: 2px;
+                margin-top: 2px;
+                margin-right: 4px;
+                vertical-align: middle;
+            }
+            #fields{
+                margin-left: 50px;
+                text-align: left;
+            }
+        </style>
+    </HEAD>
+    <BODY>
+        <h1> XML fitxategi batetik lortutako eposten zerrenda ...</h1>
+        <h2> Eposta elektronikoen zerrenda</h2><br>
+        <div id="fields">
+            <label for="eposta">Ikaslearen EHUko eposta</label><br>
+                <input type="text" name="eposta" id="eposta"><br>
+            <label for="telf">Telefono zenbakia</label><br>
+                <input type="text" name="telf" id="telf"><br>
+            <label for="izena">Ikaslearen izena</label><br>
+                <input type="text" name="izena" id="izena"><br>
+            <label for="abizena">Ikaslearen abizena/k</label><br>
+                <input type="text" name="abizena" id="abizena"><br>
+            <input type="button" name="Submit" value="Osatu eremuak" onclick="getUserInfo()">
+        </div>
+    </BODY>
+</HTML>

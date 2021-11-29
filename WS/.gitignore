@@ -1,0 +1,12 @@
+**/php/DbConfig.php
+*.code-workspace
+.vs/
+./.vs/
+**/images/questions/
+**/images/users/
+**/xml/*.xml
+**/json/*.json
+**/rest_zerbitzuak/DbConfig.php
+RestServiceConstants.php
+DbConfig.php
+
