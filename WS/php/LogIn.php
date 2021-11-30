@@ -40,23 +40,30 @@
 
         // DBtik erabiltzailearen deiturak lortu.
         $posta = $_POST['posta'];
-        $pasahitza = $_POST['pasahitza'];
-        $pasahitza = crypt($pasahitza, 'st');
-        $dbq = new mysqli($zerbitzaria, $erabiltzailea, $gakoa, $db);
-        $sql = "SELECT deiturak, mota, irudia, imgdata, egoera FROM users WHERE posta='$posta' AND pasahitza='$pasahitza';";
-        if(!$ema=$dbq->query($sql)){
-          die('Errorea frogaketan: '.$dbq->error."<br>");
+        $pasahitza = crypt($_POST['pasahitza'], 'st');
+
+        try {
+          $dsn = "mysql:host=$zerbitzaria;dbname=$db";
+          $dbh = new PDO($dsn, $erabiltzailea, $gakoa);
+        } catch (PDOException $e){
+          echo $e->getMessage();
         }
 
-        // Erabiltzailea existitzen dela ziurtatu.
-        if(mysqli_num_rows($ema) == 1){
-          $erabInfo = mysqli_fetch_row($ema);
+        // 1. Prepare
+        $stmt=$dbh->prepare("SELECT deiturak, mota, irudia, imgdata, egoera FROM users WHERE posta = ?");
+        // 2. Bind
+        $stmt->bindParam(1, $eposta);
+        // 3. Excecute
+        $stmt->execute();
+        $result=$stmt->fetchAll(PDO::FETCH_OBJ);
 
-          if($erabInfo[4] == 1){
-            $deiturak = $erabInfo[0];
-            $mota = $erabInfo[1];
-            $img_data = $erabInfo[2]; //Argazkia blob base 64
-            $img_name = $erabInfo[3]; //Argazkiaren formatua
+        if(count($result) == 1){
+
+          if($result->egoera == 1){
+            $deiturak = $result->deiturak;
+            $mota = $result->mota;
+            $img_data = $result->irudia; //Argazkia blob base 64
+            $img_name = $result->imgdata; //Argazkiaren formatua
 
             $log_MSG = $log_MSG."Kredentzial egokiak <br> <br>";
             $log_MSG = $log_MSG."<h1> Ongi Etorri '$deiturak' </h1>";
@@ -77,28 +84,26 @@
           }else{
             $log_MSG = $log_MSG."<div class='errorBox'><p>Zure kontua blokeatuta dago</p><p> Administratzailearekin kontaktuan jarri</p> </div>";
           }
+
         }else{
           $log_MSG = $log_MSG."<div class='errorBox'><p>Kredentzial okerrak</p><p> Berriro Saiatu </p> </div>";
         }
-
-      // Formularioa bete dezala.
-      }else{
-        echo('<div>
-          <form id="galderenF" name="galderenF" enctype="multipart/form-data" method="POST">
-
-            <h2>Zure kontuan sartu</h2>
-            <label for="posta">Zure eposta <font color="red">(*)</font></label>
-              <input type="text" name="posta" id="posta"><br>
-
-            <label for="pasahitza">Pasahitza <font color="red">(*)</font></label>
-              <input type="password" minlength="8" name="pasahitza" id="pasahitza" ><br>
-
-            <input type="submit" name="submitbutton" id="submitbutton" value="Kontuan sartu">
-            <input type="reset" name="hustu" id="hustu" value="Hustu"><br>
-
-          </form>
-        </div>');
       }
+      echo('<div>
+        <form id="galderenF" name="galderenF" enctype="multipart/form-data" method="POST">
+
+          <h2>Zure kontuan sartu</h2>
+          <label for="posta">Zure eposta <font color="red">(*)</font></label>
+            <input type="text" name="posta" id="posta"><br>
+
+          <label for="pasahitza">Pasahitza <font color="red">(*)</font></label>
+            <input type="password" minlength="8" name="pasahitza" id="pasahitza" ><br>
+
+          <input type="submit" name="submitbutton" id="submitbutton" value="Kontuan sartu">
+          <input type="reset" name="hustu" id="hustu" value="Hustu"><br>
+
+        </form>
+      </div>');
       echo $log_MSG;
     ?>
 

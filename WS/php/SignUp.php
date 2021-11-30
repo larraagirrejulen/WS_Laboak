@@ -82,33 +82,66 @@
 
         if($ok){
 
-          // Erabiltzailea ez dela existitzen eta errorerik ez dela sortzen ziurtatu.
-          $ok=0;
-          $dbq = new mysqli($zerbitzaria, $erabiltzailea, $gakoa, $db);
-          $sql = "SELECT posta FROM users WHERE posta='$eposta';";
-          if(!$ema=$dbq->query($sql)){
-            echo('Errorea posta erregistraturik badagoen frogaketa: '.$dbq->error."<br>");
-          }else if(mysqli_num_rows($ema) == 0){
+          try {
+            $dsn = "mysql:host=$zerbitzaria;dbname=$db";
+            $dbh = new PDO($dsn, $erabiltzailea, $gakoa);
+          } catch (PDOException $e){
+            echo $e->getMessage();
+          }
+
+          // 1. Prepare
+          $stmt=$dbh->prepare("SELECT posta FROM users WHERE posta = ?");
+          // 2. Bind
+          $stmt->bindParam(1, $eposta);
+          // 3. Excecute
+          $stmt->execute();
+          $result=$stmt->fetchAll(PDO::FETCH_OBJ);
+
+          $ok = 0;
+
+          if(count($result) == 0){
             $pass1 = crypt($pass1, 'st'); //Zifraketa
-            // Argazkia ere adierazi bada, hori ere kontuan izan datuak DBan txertatzeko.
+
+
             if(array_key_exists($argazkiTag, $_FILES) && $_FILES[$argazkiTag]["error"] == 0){
+
+              // 1. Prepare
+              $stmt = $dbh->prepare("INSERT INTO users
+              (posta, deiturak, pasahitza, mota, egoera, irudia, imgdata) VALUES (?, ?, ?, ?, 1, ?, ?)");
+              // 2. Bind
               $imageProperties = $_FILES[$argazkiTag]['name'];
               $imgData = base64_encode(file_get_contents($_FILES[$argazkiTag]['tmp_name']));
-              $sql = "INSERT INTO users (posta, deiturak, pasahitza, irudia, imgdata, mota, egoera) VALUES ( '$eposta', '$deitura', '$pass1', '$imgData', '$imageProperties', '$mota', 1);";
+              $stmt->bindParam(5, $imgData);
+              $stmt->bindParam(6, $imageProperties);
+
             }else{
-              $sql = "INSERT INTO users (posta, deiturak, pasahitza, mota, egoera) VALUES ( '$eposta', '$deitura', '$pass1' , '$mota', 1);";
+
+              // 1. Prepare
+              $stmt = $dbh->prepare("INSERT INTO users
+              (posta, deiturak, pasahitza, mota, egoera) VALUES (?, ?, ?, ?, 1)");
             }
 
-            // Feedback itzuli.
-            if(!$dbq->query($sql)){
-              echo('Errorea insert: '.$dbq->error."<br>");
-            }else{
+            // 2. Bind
+            $stmt->bindParam(1, $eposta);
+            $stmt->bindParam(2, $deitura);
+            $stmt->bindParam(3, $pass1);
+            $stmt->bindParam(4, $mota);
+
+            // 3. Excecute
+            if($stmt->execute()){
+              $ok = 1;
               $log_MSG = $log_MSG."<div class='okBox'>Era egokian erregistratu zara</div>";
-              $ok=1;
+            }else{
+              $log_MSG = $log_MSG."<div class='errorBox'>Ezin izan da erabiltzailea erregistratu</div>";
             }
+
           }else{
             $log_MSG = $log_MSG."<div class='warningBox'><p>Dagoeneko posta hori erregistratuta dago.</p><p> Beste posta batekin saiatu.</p></div>";
           }
+
+          //konexioa ixteko
+          $dbh = null;
+
         }
       }
     }
