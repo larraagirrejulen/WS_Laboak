@@ -43,7 +43,7 @@
         $pasahitza = $_POST['pasahitza'];
         $pasahitza = crypt($pasahitza, 'st');
         $dbq = new mysqli($zerbitzaria, $erabiltzailea, $gakoa, $db);
-        $sql = "SELECT deiturak, mota, egoera, irudia, imgdata FROM users WHERE posta='$posta' AND pasahitza='$pasahitza';";
+        $sql = "SELECT deiturak, mota, irudia, imgdata, egoera FROM users WHERE posta='$posta' AND pasahitza='$pasahitza';";
         if(!$ema=$dbq->query($sql)){
           die('Errorea frogaketan: '.$dbq->error."<br>");
         }
@@ -52,15 +52,14 @@
         if(mysqli_num_rows($ema) == 1){
           $erabInfo = mysqli_fetch_row($ema);
 
-          if($erabInfo[2] == 1){
+          if($erabInfo[4] == 1){
             $deiturak = $erabInfo[0];
             $mota = $erabInfo[1];
-            $img_data = $erabInfo[3]; //Argazkia blob base 64
-            $img_name = $erabInfo[4]; //Argazkiaren formatua
+            $img_data = $erabInfo[2]; //Argazkia blob base 64
+            $img_name = $erabInfo[3]; //Argazkiaren formatua
 
             $log_MSG = $log_MSG."Kredentzial egokiak <br> <br>";
             $log_MSG = $log_MSG."<h1> Ongi Etorri '$deiturak' </h1>";
-
 
             $_SESSION['posta'] = $posta;
             $_SESSION['mota'] = $mota;
@@ -73,14 +72,8 @@
             file_put_contents($img_path, base64_decode($img_data));
             $_SESSION['img'] = $img_path;
 
-            if($mota == "ikasle"){
-              header("location: ../php/HandlingQuizezAjax.php");
-            }else if ($mota == "ikasle") {
-              header("location: ../php/HandlingQuizezAjax.php"); //TODO
-            }else if ($mota == "admin"){
-              header("location: ../php/HandlingAccounts.php");
-            }
             header("location: ../php/Layout.php");
+
           }else{
             $log_MSG = $log_MSG."<div class='errorBox'><p>Zure kontua blokeatuta dago</p><p> Administratzailearekin kontaktuan jarri</p> </div>";
           }
