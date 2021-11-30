@@ -6,7 +6,7 @@
       $logeatuta = 1;
       $session_posta = $_SESSION["posta"];
       $session_mota = $_SESSION["mota"];
-      $session_irudia = $_SESSION['img'];
+      $session_irudia = $_SESSION["img"];
 
       $dbc = new mysqli($zerbitzaria, $erabiltzailea, $gakoa, $db);
 

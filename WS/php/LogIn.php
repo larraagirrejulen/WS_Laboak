@@ -55,24 +55,23 @@
           if($erabInfo[2] == 1){
             $deiturak = $erabInfo[0];
             $mota = $erabInfo[1];
-            $img = $emaitzak[2]; //Argazkia blob base 64
-            $img_props = $emaitzak[3]; //Argazkiaren formatua
+            $img_data = $erabInfo[3]; //Argazkia blob base 64
+            $img_name = $erabInfo[4]; //Argazkiaren formatua
 
-            $log_MSG = $log_MSG."Kredentzial egokiak <br> <br>"; //TODO Ez da beharrezkoa
-            $log_MSG = $log_MSG."<h1> Ongi Etorri '$dseiturak' </h1>";
+            $log_MSG = $log_MSG."Kredentzial egokiak <br> <br>";
+            $log_MSG = $log_MSG."<h1> Ongi Etorri '$deiturak' </h1>";
 
 
             $_SESSION['posta'] = $posta;
             $_SESSION['mota'] = $mota;
             erabUserCounterGehitu($posta);
-
-            if($img != null && $img_props != null){
-              $img_name = explode(-1, $img_props);
-              $img_name = $img_name[count($img_name)-1];
-              $_SESSION['img'] = "data:image/".$img_name.";base64,$img_props";
+            if($img_data != null && $img_name != null){
+              $img_path = "../images/users/".$img_name;
             }else{
-              $_SESSION['img'] = "../images/question_mark.png"
+              $img_path = "../images/question_mark.png";
             }
+            file_put_contents($img_path, base64_decode($img_data));
+            $_SESSION['img'] = $img_path;
 
             if($mota == "ikasle"){
               header("location: ../php/HandlingQuizezAjax.php");

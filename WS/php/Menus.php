@@ -35,7 +35,7 @@
 
         // DBtik erabiltzailearen gainontzeko informazioa eskuratu.
         $dbq = new mysqli($zerbitzaria, $erabiltzailea, $gakoa, $db);
-        $sql = "SELECT deiturak, irudia, imgdata FROM users WHERE posta='$session_posta';";
+        $sql = "SELECT deiturak FROM users WHERE posta='$session_posta';";
         if(!$ema = $dbq->query($sql)){
           die("Errorea datuak jasotzerakoen db-tik: ".$dbq->error."<br>");
         }
@@ -44,22 +44,15 @@
         if(mysqli_num_rows($ema) > 0){
           $emaitzak = mysqli_fetch_row($ema);
           $deiturak = $emaitzak[0];
-          $imgBase64 = $emaitzak[1]; //Argazkia blob base 64
-          $imgProperties = $emaitzak[2]; //Argazkiaren formatua
 
           // Eskuratutako datuak pantailaratu.
           echo "<div class='superleft'>Kautotutako <br> erabiltzaile  kopurua: <span class='usercounter'>?</span></div>";
           echo('<div class="left"><p>'.$session_posta);
 
           echo('</p><p>'.$deiturak.'</p></div> <div class="center">');
-          if($imgBase64 != null && $imgProperties != null){
-            $format = explode(-1, $imgProperties);
-            $format = $format[count($format)-1];
-            $argazkia = "data:image/".$format.";base64,$imgBase64";
-            echo("<img class='avatar' src='".$argazkia."' width='40px' height='40px'>");
-          }else{
-            echo("<img class='avatar' src='../images/question_mark.png' width='40px' height='40px' alt='Ez du irudirik definituta'>");
-          }
+
+          echo("<img class='avatar' src='$session_irudia' width='40px' height='40px'>");
+
           echo('</div><div class="right"><br><a href="LogOut.php">Logout</a></div>');
 
         }
