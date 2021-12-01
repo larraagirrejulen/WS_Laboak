@@ -106,6 +106,8 @@
           <input type="submit" name="submitbutton" id="submitbutton" value="Kontuan sartu">
           <input type="reset" name="hustu" id="hustu" value="Hustu"><br>
 
+          <br><a href="../php/PasswordRefactor.php">Pasahitza ahaztu duzu?</a>
+
         </form>
       </div>');
       echo $log_MSG;
