@@ -52,13 +52,13 @@
         // 1. Prepare
         $stmt=$dbh->prepare("SELECT deiturak, mota, irudia, imgdata, egoera FROM users WHERE posta = ?");
         // 2. Bind
-        $stmt->bindParam(1, $eposta);
+        $stmt->bindParam(1, $posta);
         // 3. Excecute
         $stmt->execute();
         $result=$stmt->fetchAll(PDO::FETCH_OBJ);
 
         if(count($result) == 1){
-
+          $result = $result[0];
           if($result->egoera == 1){
             $deiturak = $result->deiturak;
             $mota = $result->mota;
@@ -89,6 +89,10 @@
           $log_MSG = $log_MSG."<div class='errorBox'><p>Kredentzial okerrak</p><p> Berriro Saiatu </p> </div>";
         }
       }
+
+      //konexioa ixteko
+      $dbh = null;
+
       echo('<div>
         <form id="galderenF" name="galderenF" enctype="multipart/form-data" method="POST">
 

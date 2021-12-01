@@ -136,6 +136,7 @@
             }
 
           }else{
+            echo count($result);
             $log_MSG = $log_MSG."<div class='warningBox'><p>Dagoeneko posta hori erregistratuta dago.</p><p> Beste posta batekin saiatu.</p></div>";
           }
 
