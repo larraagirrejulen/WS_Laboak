@@ -1,6 +1,6 @@
 
 <?php include_once '../php/CaptureLoginInfo.php'?>
-<?php include '../php/DbConfig.php'?>
+<?php include_once '../php/DbConfig.php'?>
 <script src='../js/jquery-3.4.1.min.js'> </script>
 <script src='../js/LogedUserCount.js'></script>
 <div id='page-wrap'>

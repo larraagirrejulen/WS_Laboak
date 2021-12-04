@@ -1,5 +1,9 @@
 <?php
 
+if (!isset($_POST["posta"])) {
+  exit();
+}
+
 include '../php/DbConfig.php';
 $posta = $_POST["posta"];
 
@@ -21,17 +25,10 @@ $result=$stmt->fetchAll(PDO::FETCH_OBJ);
 if(count($result) == 1){
   echo '1';
 }else{
-  echo "<div class='errorBox'><p>Ez dago posta hori duen konturik</p></div>";
+  echo '0';
 }
 
-if(isset($_POST["gakoa"])){
-
-  $gakoa = $_POST["gakoa"];
-
-  $mail_body = "Kaixo, <br>
-                Emen duzu zure gakoa aldatzeko linka:
-                <br><br>Quiz Account Controller."
-
-}
+//konexioa ixteko
+$dbh = null;
 
  ?>
