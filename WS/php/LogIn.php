@@ -36,7 +36,7 @@
         echo ("<a href='Layout.php'> Hasierako Orrira joan </a> <br>");
 
       // Formularioa bete badu.
-      }else if(isset($_POST['posta']) && array_key_exists("pasahitza", $_POST)){
+    }else if(isset($_POST['posta']) && isset($_POST['pasahitza'])){
 
         // DBtik erabiltzailearen deiturak lortu.
         $posta = $_POST['posta'];
@@ -50,9 +50,10 @@
         }
 
         // 1. Prepare
-        $stmt=$dbh->prepare("SELECT deiturak, mota, irudia, imgdata, egoera FROM users WHERE posta = ?");
+        $stmt=$dbh->prepare("SELECT deiturak, mota, irudia, imgdata, egoera FROM users WHERE posta = ? AND pasahitza = ?");
         // 2. Bind
         $stmt->bindParam(1, $posta);
+        $stmt->bindParam(2, $pasahitza);
         // 3. Excecute
         $stmt->execute();
         $result=$stmt->fetchAll(PDO::FETCH_OBJ);

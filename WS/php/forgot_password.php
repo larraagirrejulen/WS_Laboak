@@ -31,15 +31,19 @@
         $posta = $_SESSION["posta"];
         $balioztatze_gakoa = $_POST["balioztatze_gakoa"];
 
-        echo "<form id='change_password_form'>
+        ?>
+        <form id="change_password_form">
            <h2>Pasahitza aldatu</h2>
            <h4>Sar ezazu zure pasahitz berria</h4>
-           <label for='pasahitza1'>Zure pasahitz berria</label>
-             <input type='password' minlength='8' name='pasahitza1' id='pasahitza1'></br>
-           <label for='pasahitza2'>Pasahitz berria errepikatu</label>
-             <input type='password' minlength='8' name='pasahitza2' id='pasahitza2'></br>
-           <input type='submit' name='submitbutton' id='submitbutton' value='Pasahitzak sartu' onclick='pasahitza_eguneratu(".$posta.", ".$balioztatze_gakoa.")'></br>
-        </form>";
+           <label for="pasahitza1">Zure pasahitz berria</label>
+             <input type="password" minlength="8" name="pasahitza1" id="pasahitza1"><br>
+           <label for="pasahitza2">Pasahitz berria errepikatu</label>
+             <input type="password" minlength="8" name="pasahitza2" id="pasahitza2"><br>
+            <input type="text" name="" id="posta" value="<?php $posta ?>" hidden>
+            <input type="text" name="" id="balioztatze_gakoa" value="<?php $balioztatze_gakoa ?>" hidden>
+     <?php echo "<input type='button' name='button' id='button' value='Pasahitzak sartu' onclick='pasahitza_eguneratu()'>"; ?> <br>
+        </form>
+        <?php
 
       }elseif (isset($_POST["posta"])) {
 

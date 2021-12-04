@@ -1,6 +1,6 @@
 <?php
 
-if(!(isset($_POST["posta"]) && isset($_POST["balioztatze_gakoa"]) && isset($_POST["pass"])){
+if(!(isset($_POST["posta"]) && isset($_POST["balioztatze_gakoa"]) && isset($_POST["pass"]))){
   echo "0";
   exit();
 }

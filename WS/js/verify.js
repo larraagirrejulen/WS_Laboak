@@ -28,18 +28,17 @@ function gakoa_balioztatu(gakoa1){
   }
 }
 
-function pasahitza_eguneratu(posta, balioztatze_gakoa){
-  alert("aaaaaa");
+function pasahitza_eguneratu(){
+
   var pass1 = document.getElementById("pasahitza1").value;
   var pass2 = document.getElementById("pasahitza2").value;
-  alert("bbbbbb");
+  var posta = document.getElementById("posta").value;
+  var balioztatze_gakoa = document.getElementById("balioztatze_gakoa").value;
+
   if (!(/^[^\s]*$/.test(pass1)) || pass1.length == 0) {
     document.getElementById('feedback').innerHTML = "<div class='errorBox'><p>Pasahitz formatua ez da egokia</p></div>";
-    return false;
   }else if (pass1 != pass2) {
-    alert("ccccc");
     document.getElementById('feedback').innerHTML = "<div class='errorBox'><p>Pasahitzak ez datoz bat</p></div>";
-    return false;
   }else{
     $.ajax({
       url: "ChangePassword.php",
@@ -47,15 +46,13 @@ function pasahitza_eguneratu(posta, balioztatze_gakoa){
       method: "POST",
       success: function(data){
         if(data != 1){
+          alert(data);
           document.getElementById('feedback').innerHTML = "<div class='errorBox'><p>Errorea pasahitza aldatzen saiatzean</p></div>";
         }else{
           alert("Pasahitza zuzen aldatu da");
           window.location.replace("../php/LogIn.php");
         }
-      },
-      async: false
+      }
     });
-
   }
-  return false;
 }
