@@ -21,8 +21,7 @@
 </head>
 
 <body>
-<?php include '../php/DbConfig.php' ?>
-<?php include_once "../php/IncreaseGlobalCounter.php" ?>
+  <?php include_once "../php/IncreaseGlobalCounter.php" ?>
   <?php include "../php/Menus.php" ?>
 
   <section class="main" id="s1">
@@ -40,8 +39,7 @@
 
         // DBtik erabiltzailearen deiturak lortu.
         $posta = $_POST['posta'];
-        $pasahitza = crypt($_POST['pasahitza'], 'st');
-
+        $pasahitza = crypt($_POST['pasahitza'], '$1$somethin$');
         try {
           $dsn = "mysql:host=$zerbitzaria;dbname=$db";
           $dbh = new PDO($dsn, $erabiltzailea, $gakoa);
@@ -50,24 +48,22 @@
         }
 
         // 1. Prepare
-        $stmt=$dbh->prepare("SELECT deiturak, mota, irudia, imgdata, egoera FROM users WHERE posta = ? AND pasahitza = ?");
+        $stmt=$dbh->prepare("SELECT deiturak, mota, irudia, imgdata, egoera, pasahitza FROM users WHERE posta = ? AND pasahitza = ?;");
         // 2. Bind
         $stmt->bindParam(1, $posta);
         $stmt->bindParam(2, $pasahitza);
         // 3. Excecute
         $stmt->execute();
-        $result=$stmt->fetchAll(PDO::FETCH_OBJ);
+        $result=$stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        if(count($result) == 1){
+        if(count($result)==1){
           $result = $result[0];
-          if($result->egoera == 1){
-            $deiturak = $result->deiturak;
-            $mota = $result->mota;
-            $img_data = $result->irudia; //Argazkia blob base 64
-            $img_name = $result->imgdata; //Argazkiaren formatua
 
-            $log_MSG = $log_MSG."Kredentzial egokiak <br> <br>";
-            $log_MSG = $log_MSG."<h1> Ongi Etorri '$deiturak' </h1>";
+          if($result["egoera"] == 1){
+            $deiturak = $result["deiturak"];
+            $mota = $result["mota"];
+            $img_data = $result["irudia"]; //Argazkia blob base 64
+            $img_name = $result["imgdata"]; //Argazkiaren formatua
 
             $_SESSION['posta'] = $posta;
             $_SESSION['mota'] = $mota;

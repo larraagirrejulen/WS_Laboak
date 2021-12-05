@@ -100,7 +100,7 @@
           $ok = 0;
 
           if(count($result) == 0){
-            $pass1 = crypt($pass1, 'st'); //Zifraketa
+            $pass1 = crypt($pass1, '$1$somethin$'); //Zifraketa
 
 
             if(array_key_exists($argazkiTag, $_FILES) && $_FILES[$argazkiTag]["error"] == 0){

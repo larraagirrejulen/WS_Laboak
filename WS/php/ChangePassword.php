@@ -9,7 +9,8 @@ include '../php/DbConfig.php';
 
 $posta = $_POST["posta"];
 $balioztatze_gakoa = $_POST["balioztatze_gakoa"];
-$pasahitza = crypt($_POST["pass"], 'st');
+$pasahitza = crypt($_POST["pass"], '$1$somethin$');
+
 
 try {
   $dsn = "mysql:host=$zerbitzaria;dbname=$db";

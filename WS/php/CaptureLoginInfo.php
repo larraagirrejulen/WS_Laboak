@@ -1,4 +1,4 @@
-<?php include "../php/DbConfig.php" ?>
+<?php include_once "../php/DbConfig.php" ?>
 <?php
     session_start();
     $logeatuta = 0;

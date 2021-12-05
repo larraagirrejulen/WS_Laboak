@@ -43,16 +43,16 @@ function pasahitza_eguneratu(){
     $.ajax({
       url: "ChangePassword.php",
       data: {posta: posta, balioztatze_gakoa: balioztatze_gakoa, pass: pass1},
-      method: "POST",
+      type: "POST",
       success: function(data){
         if(data != 1){
-          alert(data);
           document.getElementById('feedback').innerHTML = "<div class='errorBox'><p>Errorea pasahitza aldatzen saiatzean</p></div>";
         }else{
           alert("Pasahitza zuzen aldatu da");
           window.location.replace("../php/LogIn.php");
         }
-      }
+      },
+      async: false
     });
   }
 }

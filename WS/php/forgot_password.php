@@ -39,8 +39,11 @@
              <input type="password" minlength="8" name="pasahitza1" id="pasahitza1"><br>
            <label for="pasahitza2">Pasahitz berria errepikatu</label>
              <input type="password" minlength="8" name="pasahitza2" id="pasahitza2"><br>
-            <input type="text" name="" id="posta" value="<?php $posta ?>" hidden>
-            <input type="text" name="" id="balioztatze_gakoa" value="<?php $balioztatze_gakoa ?>" hidden>
+             <?php
+              echo "<input type='text' name='' id='posta' value='$posta' hidden>
+                    <input type='text' name='' id='balioztatze_gakoa' value='$balioztatze_gakoa' hidden>";
+              ?>
+
      <?php echo "<input type='button' name='button' id='button' value='Pasahitzak sartu' onclick='pasahitza_eguneratu()'>"; ?> <br>
         </form>
         <?php
@@ -76,8 +79,8 @@
         //konexioa ixteko
         $dbh = null;
 
-      //  mail($posta, "Balioztatze gakoa", "Zure kontuaren pasahitza aldatu ahal izateko gakoa,
-      //                honakoa da: "."$balioztatze_gakoa", "From: Quiz account handler");
+        mail($posta, "Balioztatze gakoa", "Zure kontuaren pasahitza aldatu ahal izateko gakoa,
+                      honakoa da: "."$balioztatze_gakoa", "From: Quiz account handler");
 
 
         echo "<form enctype='multipart/form-data' method='post' onsubmit='return gakoa_balioztatu($balioztatze_gakoa);' action='forgot_password.php'>
