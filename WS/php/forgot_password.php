@@ -3,7 +3,7 @@
 <head>
   <?php include '../html/Head.html'?>
   <link rel="stylesheet" type="text/css" href="../styles/BoxTypes.css">
-  <script src="../js/verify.js"></script>
+  <script src="../js/forgot_password.js"></script>
   <style type="text/css">
     label, input{
       margin-bottom: 2px;
@@ -22,40 +22,17 @@
 </head>
 
 <body>
-  <?php include_once "../php/IncreaseGlobalCounter.php" ?>
   <?php include "../php/Menus.php" ?>
   <section class="main" id="s1">
 
-<?php if (isset($_POST["balioztatze_gakoa"]) && isset($_SESSION["posta"])) {
-
-        $posta = $_SESSION["posta"];
-        $balioztatze_gakoa = $_POST["balioztatze_gakoa"];
-
-        ?>
-        <form id="change_password_form">
-           <h2>Pasahitza aldatu</h2>
-           <h4>Sar ezazu zure pasahitz berria</h4>
-           <label for="pasahitza1">Zure pasahitz berria</label>
-             <input type="password" minlength="8" name="pasahitza1" id="pasahitza1"><br>
-           <label for="pasahitza2">Pasahitz berria errepikatu</label>
-             <input type="password" minlength="8" name="pasahitza2" id="pasahitza2"><br>
-             <?php
-              echo "<input type='text' name='' id='posta' value='$posta' hidden>
-                    <input type='text' name='' id='balioztatze_gakoa' value='$balioztatze_gakoa' hidden>";
-              ?>
-
-     <?php echo "<input type='button' name='button' id='button' value='Pasahitzak sartu' onclick='pasahitza_eguneratu()'>"; ?> <br>
-        </form>
-        <?php
-
-      }elseif (isset($_POST["posta"])) {
+<?php if (isset($_POST["posta"])) {
 
         $posta = $_POST["posta"];
         $balioztatze_gakoa = mt_rand(100000, 999999);
 
-        $balioztatze_gakoa = 999999;
+        $url = $path."change_password.php?token=$balioztatze_gakoa&email=$posta";
 
-        $_SESSION["posta"] = $posta;
+        $balioztatze_gakoa = crypt($balioztatze_gakoa, '$1$somethin$');
 
         try {
           $dsn = "mysql:host=$zerbitzaria;dbname=$db";
@@ -79,17 +56,12 @@
         //konexioa ixteko
         $dbh = null;
 
-        mail($posta, "Balioztatze gakoa", "Zure kontuaren pasahitza aldatu ahal izateko gakoa,
-                      honakoa da: "."$balioztatze_gakoa", "From: Quiz account handler");
+        mail($posta, "Pasahitza aldatu", "Emen duzu zure Quiz kontuko pasahitza aldatzeko linka:
+                      "."$url", "From: Quiz account handler");
 
-
-        echo "<form enctype='multipart/form-data' method='post' onsubmit='return gakoa_balioztatu($balioztatze_gakoa);' action='forgot_password.php'>
-          <h2>Identitatea balioztatu</h2>
-          <h4>Sar ezazu zure posta elektronikora bidalitako gakoa zeure burua identifikatzeko</h4>
-          <label for='balioztatze_gakoa'>Gakoa</label>
-            <input type='text' name='balioztatze_gakoa' id='balioztatze_gakoa'><br>
-          <input type='submit' name='submitbutton' id='submitbutton' value='Gakoa balioztatu'><br>
-        </form>";
+        echo "<div class='okBox'><p>Mezu bat bidali dizugu zure posta elektronikora,
+        pasahitza aldatzeko link batekin. <br> Baliteke ordu bat edo batzuk behar izatea mezua iristeko.
+        <br> Horrialdea itxi dezakezu nahi baduzu.</p></div>";
 
       }else {?>
 

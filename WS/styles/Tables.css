@@ -18,7 +18,6 @@
 .table tbody{
   background-color: #cde1ff;
   font-style: italic;
-
   overflow-y: auto;
   overflow-x: hidden;
 }
