@@ -51,17 +51,21 @@
         // 3. Excecute
         if(!$stmt->execute()){
           echo "<div class='errorBox'><p>Errorea DBa atzitzean</p></div>";
+        }else{
+          if($stmt->rowCount() == 0){
+            echo "<div class='errorBox'><p>Ez da existitzen posta hori duen konturik</p></div>";
+          }else{
+            echo "<div class='okBox'><p>Mezu bat bidali dizugu zure posta elektronikora,
+            pasahitza aldatzeko link batekin. <br> Baliteke ordu bat edo batzuk behar izatea mezua iristeko.
+            <br> Horrialdea itxi dezakezu nahi baduzu.</p></div>";
+
+            mail($posta, "Pasahitza aldatu", "Emen duzu zure Quiz kontuko pasahitza aldatzeko linka:
+                          "."$url", "From: Quiz");
+          }
         }
 
         //konexioa ixteko
         $dbh = null;
-
-        mail($posta, "Pasahitza aldatu", "Emen duzu zure Quiz kontuko pasahitza aldatzeko linka:
-                      "."$url", "From: Quiz account handler");
-
-        echo "<div class='okBox'><p>Mezu bat bidali dizugu zure posta elektronikora,
-        pasahitza aldatzeko link batekin. <br> Baliteke ordu bat edo batzuk behar izatea mezua iristeko.
-        <br> Horrialdea itxi dezakezu nahi baduzu.</p></div>";
 
       }else {?>
 

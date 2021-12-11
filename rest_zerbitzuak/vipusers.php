@@ -1,7 +1,6 @@
 <?php
 
 // Datuak eskuratzeko konstanteak ...
-require_once 'DbConfig.php';
 require_once 'database.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
@@ -54,7 +53,7 @@ $resource = $_SERVER['REQUEST_URI'];
         if($data == null){
           $sql = "INSERT INTO vips VALUES ('$id');";
           $data = Database::GauzatuEzKontsulta($dbc, $sql);
-          if($data){ 
+          if($data){
             echo "<br>VIP sortua: ".$id;
           }else {
             echo "<br>Ezin izan da VIP-a gehitu: ".$id;

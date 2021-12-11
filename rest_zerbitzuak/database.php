@@ -1,11 +1,12 @@
 <?php
+require_once 'DbConfig.php';
 class Database {
 
     public static function Konektatu() {
-        $link = mysqli_connect(_HOST_, _USERNAME_, _PASSWORD_, _DATABASE_);
+        $link = mysqli_connect(HOST, USERNAME, PASSWORD, DATABASE);
 
         if (!$link) {
-            throw new Exception("Errorea zerbitzarira konektatzean" . _HOST_ . ".");
+            throw new Exception("Errorea zerbitzarira konektatzean" . HOST . ".");
         }
 
         return $link;
@@ -14,7 +15,7 @@ class Database {
     public static function Garbitu($link, $values) {
         if (gettype($values) == 'array') {
             $emaitza = array();
-            foreach ($values as $val) {  
+            foreach ($values as $val) {
                 if (function_exists("mysqli_real_escape_string")) {
                     $val = mysqli_real_escape_string($link, $val);
                 } else {
@@ -24,7 +25,7 @@ class Database {
             }
             return $emaitza;
         } else {
-            
+
             if (function_exists("mysqli_real_escape_string")) {
                 $values = mysqli_real_escape_string($link, $values);
             } else {

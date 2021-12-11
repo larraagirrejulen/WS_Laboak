@@ -36,11 +36,11 @@
       if ((!strcmp($mota,"ikasle") && preg_match("/^[A-Za-z]+\d{3}@ikasle\.ehu\.(eus|es)$/", $eposta)) || (!strcmp($mota,"irakasle") && preg_match("/^[A-Za-z]+\.?[A-Za-z]*@ehu\.(eus|es)$/", $eposta))){
         if (preg_match("/^([A-Za-z]+\s){1,4}[A-Za-z]+$/", $deitura)){
           if(!strcmp($pasahitza1, $pasahitza2) && strlen($pasahitza1)>0 && preg_match("/^[^\s]*$/", $pasahitza1)){
-            if (matrikulaEgiaztatu($eposta)) {
+            // if (matrikulaEgiaztatu($eposta)) {
               $ondo = 1;
-            }else {
-              $error_log = $error_log."<div class='errorBox'><p>WS irakasgaian matrikulatuta egon behar duzu!</p></div>";
-            }
+            // }else {
+              // $error_log = $error_log."<div class='errorBox'><p>WS irakasgaian matrikulatuta egon behar duzu!</p></div>";
+            // }
           }else{
             $error_log = $error_log."<div class='errorBox'><p>Pasahitzak ez daude ondo.</p><p> Ez dira berdinak edo luzeera gutxikoak (<8) eta hutsunerik gabe</p></div>";
           }
