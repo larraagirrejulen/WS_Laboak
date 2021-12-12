@@ -25,15 +25,11 @@
   <?php include "../php/Menus.php" ?>
   <section class="main" id="s1">
 
-<?php if(isset($_POST["pasahitza1"]) && isset($_POST["pasahitza2"]) && isset($_POST["posta"]) && isset($_POST["token"])){
+<?php if(isset($_POST["pasahitza1"]) && isset($_POST["pasahitza2"]) && isset($_POST["posta"]) && isset($_POST["token"]) && $_POST["token"]!=-1){
 
         $posta = $_POST["posta"];
         $token = crypt($_POST["token"], '$1$somethin$');
         $pasahitza = crypt($_POST["pasahitza1"], '$1$somethin$');
-
-        if(is_null($token) || $token == ""){
-          exit();
-        }
 
         try {
           $dsn = "mysql:host=$zerbitzaria;dbname=$db";
@@ -43,7 +39,7 @@
         }
 
         // 1. Prepare
-        $stmt = $dbh->prepare("UPDATE users SET pasahitza=?, gakoa=NULL WHERE posta=? AND gakoa=?");
+        $stmt = $dbh->prepare("UPDATE users SET pasahitza=?, gakoa=-1 WHERE posta=? AND gakoa=?");
 
         // 2. Bind
         $stmt->bindParam(1, $pasahitza);
@@ -52,7 +48,11 @@
 
         // 3. Excecute
         if($stmt->execute()){
-          echo "<div class='okBox'><p>Pasahitza zuzen aldatu da</p></div>";
+          if($stmt->rowCount() == 0){
+            echo "<div class='errorBox'><p>Token okerra, pasahitza aldatzeko beste link bat eskatu</p></div>";
+          }else{
+            echo "<div class='okBox'><p>Pasahitza zuzen aldatu da</p></div>";
+          }
         }else{
           echo "<div class='errorBox'><p>Errorea pasahitza aldatzean</p></div>";
         }
@@ -64,10 +64,6 @@
 
         $token = $_GET["token"];
         $posta = $_GET["email"];
-
-        if(is_null($token) || $token == ""){
-          exit();
-        }
 
         ?>
         <form enctype="multipart/form-data" method="post" onsubmit="return pasahitza_balioztatu();" action="change_password.php">
